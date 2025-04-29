@@ -3,7 +3,7 @@ const router = express.Router();
 
 const reportController = require("./../controllers/reportController.js"); // importe o controller
 const heroiController = require("./../controllers/heroiController.js"); // importe o controller
-const apiKeyMiddleware = require("./../config/apiKey")
+const apiKeyMiddleware = require("./../config/apiKey.js")
 
 
 //Rota para o PDF

@@ -1,50 +1,42 @@
 const pool = require("../config/database");
 
-const getAllHerois = async () => {
-    const result = await pool.query(
-        `SELECT herois.*, editoras.nome AS editora_nome
-         FROM herois 
-         LEFT JOIN editoras ON herois.editora_id = editoras.id`
-    );
+const getAllEditoras = async () => {
+    const result = await pool.query("SELECT * FROM editoras");
     return result.rows;
 };
 
-const getHeroiById = async (id) => {
+
+const getEditoraById = async (id) => {
+    const result = await pool.query("SELECT * FROM editoras WHERE id = $1", [id]);
+    return result.rows[0];
+};
+
+const createEditora = async (nome, pais_origem) => {
     const result = await pool.query(
-        `SELECT herois.*, editoras.name AS editora_nome 
-         FROM herois
-         LEFT JOIN editoras ON herois.editora_id = editoras.id 
-         WHERE herois.id = $1`, [id] 
+        "INSERT INTO editoras (nome, pais_origem) VALUES ($1, $2) RETURNING *",
+        [nome, pais_origem]
     );
     return result.rows[0];
 };
 
-//Atualizar para receber photo.
-const createHeroi = async (nome, poder, editora_id, photo) => {
+const updateEditora = async (id, nome, pais_origem) => {
     const result = await pool.query(
-        "INSERT INTO herois (nome, poder, editora_id) VALUES ($1, $2, $3) RETURNING *",
-        [nome, poder, editora_id, photo]
-    );
-    return result.rows[0];
-};
-
-const updateHeroi = async (id, nome, poder, editora_id) => {
-    const result = await pool.query(
-        "UPDATE herois SET nome = $1, poder = $2, editora_id = $3 WHERE id = $4 RETURNING *",
-        [nome, poder, editora_id, id]
+        "UPDATE editoras SET nome = $1, pais_origem = $2 WHERE id = $3 RETURNING *",
+        [nome, pais_origem, id]
     );
     if (result.rowCount === 0) {
-        return { error: "Herói não encontrado!" };
+        return { error: "Editora não encontrada!" };
     }
     return result.rows[0];
 };
 
-const deleteHeroi = async (id) => {
-    const result = await pool.query("DELETE FROM herois WHERE id = $1 RETURNING *", [id]);
+
+const deleteEditora = async (id) => {
+    const result = await pool.query("DELETE FROM editoras WHERE id = $1 RETURNING *", [id]);
     if (result.rowCount === 0) {
-        return { error: "Herói não encontrado!" };
+        return { error: "Editora não encontrada!" };
     }
     return result.rows[0];
-}
+};
 
-module.exports = { getAllHerois, getHeroiById, createHeroi, updateHeroi, deleteHeroi };
+module.exports = { getAllEditoras, getEditoraById, createEditora, updateEditora, deleteEditora };

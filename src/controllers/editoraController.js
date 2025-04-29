@@ -1,4 +1,4 @@
-const houseModel = require("../models/editoraModel");
+const editoraModel = require("../models/editoraModel");
 
 const getAllEditoras = async (req, res) => {
     try {
@@ -24,8 +24,8 @@ const getEditora = async (req, res) => {
 const createEditora = async (req, res) => {
     try {
         const { nome, pais_origem } = req.body;
-        const newPais_origem = await editoraModel.createEditora(nome, pais_origem);
-        res.status(201).json(newPais_origem);
+        const newEditora = await editoraModel.createEditora(nome, pais_origem);
+        res.status(201).json(newEditora);
     } catch (error) {
         res.status(500).json({ message: "Erro ao criar a editora." });
     }
@@ -43,11 +43,11 @@ const deleteEditora = async (req, res) => {
 const updateEditora = async (req, res) => {
     try {
         const { nome, pais_origem } = req.body;
-        const updateEditora = await editoraModel.updateEditora(req.params.id, nome, pais_origem);
-        if (!updateEditora) {
+        const updatedEditora = await editoraModel.updateEditora(req.params.id, nome, pais_origem);
+        if (!updatedEditora) {
             return res.status(404).json({ message: "Editora não encontrada." });
         }
-        res.json(updateEditora);
+        res.json(updatedEditora);
     } catch (error) {
         res.status(500).json({ message: "Erro ao atualizar editora." });
     }

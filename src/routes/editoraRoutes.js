@@ -2,7 +2,7 @@
 const express = require("express");
 const router = express.Router();;
 const editoraController = require("../controllers/editoraController");
-
+const apiKeyMiddleware = require("../config/apiKey");
 
 router.get("/", editoraController.getAllEditoras);
 router.post("/", editoraController.createEditora);
