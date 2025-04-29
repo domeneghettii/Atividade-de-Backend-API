@@ -1,11 +1,12 @@
-CREATE DATABASE herois_db;
-\c herois_db;
+CREATE DATABASE herois;
+
+\c herois;
 
 CREATE TABLE editoras (
     id SERIAL PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL UNIQUE
+    nome VARCHAR(100) NOT NULL UNIQUE,
+    pais_origem VARCHAR(100)
 );
-
 
 CREATE TABLE herois (
     id SERIAL PRIMARY KEY,
@@ -16,13 +17,16 @@ CREATE TABLE herois (
 );
 
 
-INSERT INTO editoras (nome) VALUES 
-    ('Marvel Comics'),
-    ('DC Comics');
-
+INSERT INTO editoras (nome, pais_origem) VALUES 
+    ('Marvel Comics', 'Estados Unidos'),
+    ('DC Comics', 'Estados Unidos'),
+    ('Dark Horse Comics', 'Estados Unidos'),
+    ('Image Comics', 'Estados Unidos'),
+    ('IDW Publishing', 'Estados Unidos');
 
 INSERT INTO herois (nome, poder, editora_id) VALUES 
     ('Homem-Aranha', 'Sentido Aranha', 1),
-    ('Homem de Ferro', 'Armadura Tecnológica', 1),
-    ('Batman', 'Inteligência e Recursos', 2),
-    ('Mulher-Maravilha', 'Força e Agilidade', 2);
+    ('Homem de Ferro', 'Armadura Tecnológica', 2),
+    ('Batman', 'Inteligência e Recursos', 3),
+    ('Mulher-Maravilha', 'Força e Agilidade', 4),
+    ('Superman', 'Força Sobrehumana', 5);

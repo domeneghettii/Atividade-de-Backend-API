@@ -1,40 +1,48 @@
 const pool = require("../config/database");
 
-const getUsers = async () => {
-    const result = await pool.query("SELECT * FROM users");
+const getHerois = async () => {
+    const result = await pool.query(
+        `SELECT herois.*, editoras.nome AS editora_nome
+         FROM herois 
+         LEFT JOIN editoras ON herois.editora_id = editoras.id`
+    );
     return result.rows;
-};
+}
 
-const getUserById = async (id) => {
-    const result = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
-    return result.rows[0];
-};
-
-const createUser = async (name, email) => {
+const getHeroiById = async (id) => {
     const result = await pool.query(
-        "INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *",
-        [name, email]
+        `SELECT herois.*, editoras.nome AS editora_nome 
+         FROM herois
+         LEFT JOIN editoras ON herois.editora_id = editoras.id 
+         WHERE herois.id = $1`, [id] 
+    );
+    return result.rows[0];
+}
+
+//Atualizar para receber photo.
+const createHeroi = async (nome, poder, editora_id, photo) => {
+    const result = await pool.query(
+        "INSERT INTO herois (nome, poder, editora_id) VALUES ($1, $2, $3) RETURNING *",
+        [nome, poder, editora_id, photo]
     );
     return result.rows[0];
 };
 
-const updateUser = async (id, name, email) => {
+const updateHeroi = async (id, nome, poder, editora_id) => {
     const result = await pool.query(
-        "UPDATE users SET name = $1, email = $2 WHERE id = $3 RETURNING *",
-        [name, email, id]
+        "UPDATE herois SET nome = $1, editora_id = $2 WHERE id = $3 RETURNING *",
+        [nome, editora_id, id]
     );
     return result.rows[0];
-};
+}
 
-const deleteUser = async (id) => {
-    const result = await pool.query("DELETE FROM users WHERE id = $1 RETURNING *", [id]);
-
+const deleteHeroi = async (id) => {
+    const result = await pool.query("DELETE FROM herois WHERE id = $1 RETURNING *", [id]);
     if (result.rowCount === 0) {
-        return { error: "Usuário não encontrado." };
+        return { error: "Herói não encontrado!" };
     }
+        return { message: "Herói deletado com sucesso!" };
+}
 
-    return { message: "Usuário deletado com sucesso." };
-};
-
-module.exports = { getUsers, getUserById, createUser, updateUser, deleteUser };
+module.exports = { getHerois, getHeroiById, createHeroi, updateHeroi, deleteHeroi };
 

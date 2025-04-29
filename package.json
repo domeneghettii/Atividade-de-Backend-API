@@ -7,7 +7,6 @@
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
-  
   "repository": {
     "type": "git",
     "url": "git+https://github.com/domeneghettii/Atividade-de-Backend-API.git"
@@ -24,6 +23,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "pg": "^8.15.6",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
