@@ -1,16 +1,21 @@
-const express = require('express');
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const path = require("path");
+const heroiRoutes = require("./src/routes/heroiRoutes");
+const editoraRoutes = require("./src/routes/editoraRoutes");
+
 const app = express();
-const heroiRoutes = require('./src/routes/heroiRoutes'); // Caminho corrigido
-const editoraRoutes = require('./src/routes/editoraRoutes'); // Caminho corrigido
-const setupSwagger = require('./src/config/swagger'); // Swagger aqui
-
+app.use(cors());
 app.use(express.json());
-setupSwagger(app); // Ativa o Swagger
 
-// Prefixo /api para as rotas
-app.use('/api', heroiRoutes);
-app.use('/api', editoraRoutes);
+app.use("/api/herois", heroiRoutes);
+app.use("/api/editoras", editoraRoutes);
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-app.listen(3030, () => {
-  console.log('Servidor rodando na porta 3030');
+
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
 });
