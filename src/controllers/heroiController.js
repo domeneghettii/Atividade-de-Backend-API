@@ -1,16 +1,17 @@
-// filepath: c:\Users\Aluno DS\Documents\GitHub\Atividade-de-Backend-API\src\controllers\heroiController.js
 const heroiModel = require("../models/heroiModel");
 
-const getHerois = async (req, res) => {
+
+const getAllHerois = async (req, res) => {
     try {
-        const herois = await heroiModel.getAllHerois();
+        const herois = await heroiModel.getHeroi();
         res.json(herois);
     } catch (error) {
         res.status(500).json({ message: "Erro ao buscar heróis." });
     }
 };
 
-const getHeroiById = async (req, res) => {
+
+const getHeroi = async (req, res) => {
     try {
         const heroi = await heroiModel.getHeroiById(req.params.id);
         if (!heroi) {
@@ -22,15 +23,11 @@ const getHeroiById = async (req, res) => {
     }
 };
 
-const exportHeroiPDF = async (req, res) => {
-    res.json({ message: "Exportando relatório em PDF do herói." });
-};
-
 const createHeroi = async (req, res) => {
     try {
-        const { name, house_id } = req.body;
-        const photo = req.file ? req.file.path : null;
-        const newHeroi = await heroiModel.createHeroi(name, house_id, photo);
+        const { nome, pais_origem } = req.body;
+        const photo = req.file ? req.file.path : null; // Verifica se a imagem foi enviada
+        const newHeroi = await heroiModel.createHeroi(nome, pais_origem, photo);
         res.status(201).json(newHeroi);
     } catch (error) {
         res.status(500).json({ message: "Erro ao criar herói." });
@@ -39,12 +36,12 @@ const createHeroi = async (req, res) => {
 
 const updateHeroi = async (req, res) => {
     try {
-        const { name, house_id } = req.body;
-        const updatedHeroi = await heroiModel.updateHeroi(req.params.id, name, house_id);
-        if (!updatedHeroi) {
+        const { nome, pais_origem } = req.body;
+        const updateHeroi = await heroiModel.updateHeroi(req.params.id, nome, pais_origem);
+        if (!updateHeroi) {
             return res.status(404).json({ message: "Herói não encontrado." });
         }
-        res.json(updatedHeroi);
+        res.json(updateHeroi);
     } catch (error) {
         res.status(500).json({ message: "Erro ao atualizar herói." });
     }
@@ -59,4 +56,6 @@ const deleteHeroi = async (req, res) => {
     }
 };
 
-module.exports = { getHerois, getHeroiById, exportHeroiPDF, createHeroi, updateHeroi, deleteHeroi };
+
+
+module.exports = { getAllHerois, getHeroi, createHeroi, updateHeroi, deleteHeroi };
