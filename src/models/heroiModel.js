@@ -30,8 +30,8 @@ const createHeroi = async (nome, poder, editora_id, photo) => {
 
 const updateHeroi = async (id, nome, poder, editora_id) => {
     const result = await pool.query(
-        "UPDATE herois SET nome = $1, editora_id = $2 WHERE id = $3 RETURNING *",
-        [nome, editora_id, id]
+        "UPDATE herois SET nome = $1, poder = $2, editora_id = $3 WHERE id = $4 RETURNING *",
+        [nome, poder, editora_id, id]
     );
     return result.rows[0];
 }

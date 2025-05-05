@@ -5,6 +5,7 @@ const getAllEditoras = async (req, res) => {
         const editoras = await editoraModel.getEditoras();
         res.json(editoras);
     } catch (error) {
+        console.error("Erro ao buscar editoras:", error);
         res.status(500).json({ message: "Erro ao buscar editoras." });
     }
 };
@@ -17,6 +18,7 @@ const getEditora = async (req, res) => {
         }
         res.json(editora);
     } catch (error) {
+        console.error("Erro ao buscar editora:", error);
         res.status(500).json({ message: "Erro ao buscar editora." });
     }
 };
@@ -24,9 +26,10 @@ const getEditora = async (req, res) => {
 const createEditora = async (req, res) => {
     try {
         const { nome, pais_origem } = req.body;
-        const newEditora = await editoraModel.createEditora(nome, pais_origem);
-        res.status(201).json(newEditora);
+        const novaEditora = await editoraModel.createEditora(nome, pais_origem);
+        res.status(201).json(novaEditora);
     } catch (error) {
+        console.error("Erro ao criar a editora:", error);
         res.status(500).json({ message: "Erro ao criar a editora." });
     }
 };
@@ -34,8 +37,12 @@ const createEditora = async (req, res) => {
 const deleteEditora = async (req, res) => {
     try {
         const message = await editoraModel.deleteEditora(req.params.id);
+        if (message.error) {
+            return res.status(404).json({ message: message.error });
+        }
         res.json(message);
     } catch (error) {
+        console.error("Erro ao deletar editora:", error);
         res.status(500).json({ message: "Erro ao deletar editora." });
     }
 };
@@ -43,12 +50,13 @@ const deleteEditora = async (req, res) => {
 const updateEditora = async (req, res) => {
     try {
         const { nome, pais_origem } = req.body;
-        const updatedEditora = await editoraModel.updateEditora(req.params.id, nome, pais_origem);
-        if (!updatedEditora) {
+        const editoraAtualizada = await editoraModel.updateEditora(req.params.id, nome, pais_origem);
+        if (!editoraAtualizada) {
             return res.status(404).json({ message: "Editora não encontrada." });
         }
-        res.json(updatedEditora);
+        res.json(editoraAtualizada);
     } catch (error) {
+        console.error("Erro ao atualizar editora:", error);
         res.status(500).json({ message: "Erro ao atualizar editora." });
     }
 };
